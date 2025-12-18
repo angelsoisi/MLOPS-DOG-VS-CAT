@@ -1,40 +1,43 @@
-# 1. Detener los contenedores actuales
+# 1. Stop current containers
 docker-compose down
 
-# 2. construir las imágenes con las  dependencias
+# 2. Build the image with the dependencies 
 docker-compose build --no-cache
 
-# 3. Iniciar de nuevo
+# 3. Start again
 docker-compose up -d
 
-# 4. Ver los logs para confirmar que ya no hay errores
+# 4. Access logs 
 docker-compose logs -f
 
-# verificar que funciona
+# verify is working
 curl http://localhost/health
 
-# Ver todos los contenedores
+# see all containers 
 docker-compose ps
 
-# Ver logs en tiempo real
+# see the logs on live time
 docker-compose logs -f
 
-# Ver logs de un nodo específico
+# See the logs from a specific node 
 docker-compose logs -f api_node1
 docker-compose logs -f nginx
 
-# Ver qué nodo responde cada vez
+# See which node answers the petitions 
 curl -I http://localhost/health | grep X-Upstream-Server
 
-# Hacer múltiples requests y ver la distribución
+# Do multiple requests and see the distribution
 for i in {1..20}; do
   curl -s -I http://localhost/health | grep X-Upstream-Server
 done
 
-# Detener un nodo para ver el auto-recovery
+# Stop a node to verify the auto-recovery
 docker-compose stop api_node1
 
-# Nginx automáticamente redirige a los otros 5 nodos
+# Nginx will automatically redirect to the other 5 nodes 
+
+# Start the node again
+docker-compose start api_node1
 
 # Volver a iniciar el nodo
 docker-compose start api_node1
